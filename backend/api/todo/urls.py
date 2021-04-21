@@ -18,7 +18,7 @@ urlpatterns = [
     # path('updateTask/<int:key>', views.updateTask, name='update task'),
 
     #~~~~~~~~~~~~~~~~~~~ Using GenericViews and Mixins ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-    # path('tasks/', views.TaskCreate.as_view()), --------------------- no pagination
+    # path('tasks/', views.TaskCreate.as_view()), ---------------------> no pagination
     # path('addTask/', views.TaskCreate.as_view()),
     # path('deleteTask/<int:pk>', views.TaskUpdateDelete.as_view()),
     # path('updateTask/<int:pk>', views.TaskUpdateDelete.as_view())

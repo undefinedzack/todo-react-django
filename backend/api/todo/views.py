@@ -6,10 +6,12 @@ from django.core.paginator import Paginator, EmptyPage
 
 # GenericAPIView & Mixins
 from rest_framework.generics import GenericAPIView
-from rest_framework.mixins import ListModelMixin, CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin
+from rest_framework.mixins import ListModelMixin, CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, \
+    DestroyModelMixin
 
 # Viewsets
 from rest_framework import viewsets
+
 
 @api_view(['GET'])
 def apiOverview(request):
@@ -22,7 +24,9 @@ def apiOverview(request):
 
     return Response(api_urls)
 
-# Basic Implementation
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Basic Implementation ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 @api_view(['GET'])
 def getTasks(request):
     tasks = ToDo.objects.all()
@@ -47,6 +51,7 @@ def toggleComplete(request, key):
 
     serializedTask = ToDoSerializer(task)
     return Response(serializedTask.data)
+
 
 # @api_view(['GET', 'POST'])
 # def addTask(request):
@@ -78,7 +83,9 @@ def updateTask(request, key):
 
     return Response(serializedTask.data)
 
-# Implementation using GenericViews and Mixins
+
+# ~~~~~~~~~~~~~~~~~~~~~~~~ Implementation using GenericViews and Mixins ~~~~~~~~~~~~~~~~~~~~~~~~~
+
 class TaskCreate(GenericAPIView, ListModelMixin, CreateModelMixin):
     queryset = ToDo.objects.all()
     serializer_class = ToDoSerializer
@@ -90,7 +97,7 @@ class TaskCreate(GenericAPIView, ListModelMixin, CreateModelMixin):
         return self.create(request, *args, **kwargs)
 
 
-class TaskUpdateDelete(GenericAPIView,RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin):
+class TaskUpdateDelete(GenericAPIView, RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin):
     queryset = ToDo.objects.all()
     serializer_class = ToDoSerializer
 
@@ -104,9 +111,8 @@ class TaskUpdateDelete(GenericAPIView,RetrieveModelMixin, UpdateModelMixin, Dest
         return self.destroy(request, *args, **kwargs)
 
 
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ Implementation using ViewSets ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-
-# Implementation using ViewSets
 class TaskViewSet(viewsets.ViewSet):
     def list(self, request):
         tasks = ToDo.objects.all()
@@ -138,7 +144,6 @@ class TaskViewSet(viewsets.ViewSet):
         task = ToDo.objects.get(id=pk)
 
         if request.method == 'PUT':
-            print('im here')
             sTask = ToDoSerializer(data=request.data, instance=task)
             if sTask.is_valid():
                 sTask.save()
